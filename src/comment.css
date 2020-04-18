@@ -18,6 +18,14 @@
     /*justify-content: center;*/
     align-items: center;
 }
+.comment_box {
+    display: flex;
+    /* flex-direction: column;
+    flex-wrap: wrap; */
+    flex-flow: column wrap;
+    /*justify-content: center;*/
+    align-items: center;
+}
 .comment_box >div {
     display: flex;
     justify-content: space-around;
