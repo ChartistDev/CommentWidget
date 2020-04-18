@@ -6,7 +6,7 @@
     flex-wrap: wrap; */
     flex-flow: row wrap;
     background-color: cornflowerblue;
-    /*height: 800px;*/
+    min-height: 800px;
     justify-content: center;
 }
 .comment_container {
@@ -15,14 +15,36 @@
     flex-wrap: wrap; */
     width:100%;
     flex-flow: column wrap;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: center;
 }
 .comment_box >div {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin: 10px;
+}
+.comment_box>div>textarea {
+    resize: none;
 }
 .comment_box >div> button {
     margin : 10px;
+}
+.comment_list_container {
+    display: flex;
+    /* flex-direction: column;
+    flex-wrap: wrap; */
+    width:100%;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+.btnDiv {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+.btnDiv>button {
+    margin:10px;
 }
