@@ -2,45 +2,62 @@ const UNDEF = undefined;
 const state = [];
 const debounce = function(fn, delay){
     let timeout;
-    return function() {
+    return function(...args) {
         let obj = this,
-            args = arguments;
+            args2 = arguments;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            fn.call(obj, ...args);
+            fn.apply(obj, [...args, ...args2]);
         },delay)
     }
 
 }
-const deleteComment = (index) => {
+const deleteComment = (index, listDiv) => {
     state.splice(index, 1);
     createElements(state,listDiv);
 }
-const rplyComment = (index) => {
+const rplyComment = (index, listDiv) => {
     if(state && state.length) {
+        state[index].replies.visible = true;
         createRplyComments(state[index], listDiv.children[index]);
     }
 }
-const postReply = (state, value) => {
+const postReply = (state, textArea, div) => {
+    console.log(textArea);
     state.replies.comments.push({
-        comment: value
+        comment: textArea.value
     })
+    createRplyComments(state, div);
 }
 const createRplyComments = (state, div) => {
+    while (div.firstChild) {
+        div.removeChild(div.lastChild);
+      }
     let replies = state.replies,
-        textArea,rplybtn,btnText;
-    if(replies.comments && replies.comments.length) {
-       //Check if div has a child
-    } 
-        textArea = document.createElement("textarea");
-        textArea.setAttribute("rows", "4");
-        textArea.setAttribute("cols", "40");
-        rplybtn = document.createElement("button");
-        btnText = document.createTextNode("post");
-        rplybtn.appendChild(btnText);
-        div.appendChild(textArea);
-        div.appendChild(rplybtn);
-        rplybtn.addEventListener("click", addRply.bind(this, state, textArea.value));
+        textArea,postrplybtn,btnText;
+        if(replies.visible === true) {
+            if(replies.comments && replies.comments.length) {
+            //Check if div has a child
+            replies.comments.forEach((comment) => {
+                textArea = document.createElement("textarea");
+                textArea.setAttribute("rows", "4");
+                textArea.setAttribute("cols", "40");
+                textArea.setAttribute("disabled", true);
+                let text = document.createTextNode(comment);
+                textArea.appendChild(text);
+                div.appendChild(textArea);
+            })
+            }
+            textArea = document.createElement("textarea");
+            textArea.setAttribute("rows", "4");
+            textArea.setAttribute("cols", "40");
+            postrplybtn = document.createElement("button");
+            btnText = document.createTextNode("post");
+            postrplybtn.appendChild(btnText);
+            div.appendChild(textArea);
+            div.appendChild(postrplybtn);
+            postrplybtn.addEventListener("click", addRply.bind(this, state, textArea, div));    
+    }
 }
 const createElements = (state, listDiv) => {
     while (listDiv.firstChild) {
@@ -72,15 +89,18 @@ const createElements = (state, listDiv) => {
                 listDiv.appendChild(div);
                 label.innerHTML = commentJSON.comment;
 
-                delbtn.addEventListener("click", del.bind(this, index));
-                rplybtn.addEventListener("click", rply.bind(this, index));
+                delbtn.addEventListener("click", del.bind(this, index, listDiv));
+                rplybtn.addEventListener("click", rply.bind(this, index, listDiv));
                 createRplyComments(commentJSON, listDiv.children[index]);
         });
     }
 }
-const del = debounce(deleteComment, 200);
-const rply = debounce(rplyComment, 200);
-const addRply = debounce(postReply, 200);
+
+const del = debounce(deleteComment, 200);//delete
+const rply = debounce(rplyComment, 200);//reply
+const addRply = debounce(postReply, 200);//post reply
+
+//Post New Comment
 const post = (area, listDiv) => {
 
 createCommentJSON(area.value);

@@ -32,8 +32,8 @@
     align-items: center;
     margin: 10px;
 }
-.comment_box>div>textarea {
-    resize: none;
+textarea {
+        resize: none;
 }
 .comment_box >div> button {
     margin : 10px;
