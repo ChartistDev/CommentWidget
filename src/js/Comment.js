@@ -23,16 +23,19 @@ const rplyComment = (index, listDiv) => {
     }
 }
 const postReply = (state, textArea, div) => {
-    console.log(textArea);
+    console.log(div);
+    while (div.firstChild) {
+            div.removeChild(div.lastChild);
+          }
     state.replies.comments.push({
         comment: textArea.value
     })
     createRplyComments(state, div);
 }
 const createRplyComments = (state, div) => {
-    while (div.firstChild) {
-        div.removeChild(div.lastChild);
-      }
+    // while (div.firstChild) {
+    //     div.removeChild(div.lastChild);
+    //   }
     let replies = state.replies,
         textArea,postrplybtn,btnText;
         if(replies.visible === true) {
