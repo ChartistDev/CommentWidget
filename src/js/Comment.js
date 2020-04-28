@@ -2,12 +2,12 @@ const UNDEF = undefined;
 const state = [];
 const debounce = function(fn, delay){
     let timeout;
-    return function(...args) {
+    return function() {
         let obj = this,
-            args2 = arguments;
+            args = arguments;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            fn.apply(obj, [...args, ...args2]);
+            fn.apply(obj, args);
         },delay)
     }
 
@@ -23,10 +23,12 @@ const rplyComment = (index, listDiv) => {
     }
 }
 const postReply = (state, textArea, div) => {
-    console.log(div);
-    while (div.firstChild) {
-            div.removeChild(div.lastChild);
-          }
+    for(let i=1;i<div.children.length;i++) {
+        div.removeChild(div.children[i]);
+    }
+    // while (div.firstChild) {
+    //         div.removeChild(div.lastChild);
+    //       }
     state.replies.comments.push({
         comment: textArea.value
     })
@@ -94,6 +96,7 @@ const createElements = (state, listDiv) => {
 
                 delbtn.addEventListener("click", del.bind(this, index, listDiv));
                 rplybtn.addEventListener("click", rply.bind(this, index, listDiv));
+                console.log(listDiv.children[index]);
                 createRplyComments(commentJSON, listDiv.children[index]);
         });
     }
